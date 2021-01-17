@@ -5,7 +5,6 @@
 
 html {
   box-sizing: border-box;
-  height: 100%;
 }
 
 body {
@@ -14,7 +13,6 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 100%;
 }
 
 .swquiz-header {
