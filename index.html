@@ -1,48 +1,124 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>CodersCamp2020 | Star Wars API QUIZ</title>
-    <link rel="stylesheet" href="styles/App.css"/>
+    <link rel="stylesheet" href="styles/App.css" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet">
-</head>
-<body>
-
-<div id="swquiz-app">
-    <div class="swquiz-header">
-        <img class="swquiz-header__logo-image" src="static/assets/ui/StarWarsLogo.png" alt=""></img>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="swquiz-app">
+      <div class="swquiz-header">
+        <img
+          class="swquiz-header__logo-image"
+          src="static/assets/ui/StarWarsLogo.png"
+          alt=""
+        />
         <div id="swquiz-header__main-menu" class="swquiz-header__main-menu">
-            <p class="main-menu__option main-menu__option--selected" id="people">people</p>
-            <p class="main-menu__option" id="vehicles">vehicles</p>
-            <p class="main-menu__option" id="starships">starships</p></div>
-    </div>
-    <div class="swquiz-mode">
+          <p class="main-menu__option main-menu__option--selected" id="people">
+            people
+          </p>
+          <p class="main-menu__option" id="vehicles">vehicles</p>
+          <p class="main-menu__option" id="starships">starships</p>
+        </div>
+      </div>
+      <div class="swquiz-mode">
         <div class="swquiz-mode-container">
-            <div class="swquiz-mode__question-image"><img src="static/assets/img/modes/people/2.jpg" alt=""></img></div>
-            <div style="width: 2rem"></div>
-            <div class="swquiz-mode__menu">
-                <div class="menu__title"><p>Who is this character?</p></div>
-                <div class="menu__content">
-                    <h2>Mode Rules</h2>
-                    <p>You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select who from Star Wars is showed on the left (Jar Jar Binks right now) from available options.</p>
-                </div>
-                <div class="menu__buttons">
-                    <button class="swquiz-button">Hall of fame</button>
-                    <div style="width: 2rem"></div>
-                    <button class="swquiz-button swquiz-button--active">PLAY THE GAME</button>
-                </div>
+          <div class="swquiz-mode__question-image">
+            <img src="static/assets/img/modes/people/2.jpg" alt="" />
+          </div>
+          <div style="width: 2rem"></div>
+          <div class="swquiz-mode__menu">
+            <div class="menu__title"><p>Who is this character?</p></div>
+            <div class="menu__content">
+              <h2>Mode Rules</h2>
+              <p>
+                You have one minute (1m) to answer as many questions as
+                possible. During the game on each question you need to select
+                who from Star Wars is showed on the left (Jar Jar Binks right
+                now) from available options.
+              </p>
             </div>
+            <div class="menu__buttons">
+              <button class="swquiz-button">Hall of fame</button>
+              <div style="width: 2rem"></div>
+              <button class="swquiz-button swquiz-button--active">
+                PLAY THE GAME
+              </button>
+            </div>
+          </div>
         </div>
         <div class="swquiz-mode-settings">
-            <button class="swquiz-button">Settings</button>
+          <button class="swquiz-button">Settings</button>
         </div>
+      </div>
+      <div class="gameOver">
+        <h2 class="gameOver__title">Game over</h2>
+        <p class="gameOver__summary">
+          The force is strong in you young Padawan! During 1 minute you have
+          answered 10 / 23 questions. And Computer quessed 5 / 23.
+        </p>
+        <div class="gameOver__answers">
+          <div class="answers__left">
+            <img src="./static/assets/ui/MasterYodaLeft.png" alt="yoda left" />
+          </div>
+          <div class="answers__right">
+            <p class="answers__detailed">Detailed answers</p>
+            <div class="answers__container">
+              <p class="answers_col2">You</p>
+              <p class="answers_col3">Computer</p>
+              <p class="answers_col4">Answer</p>
+              <div class="answers_col1">
+                <img
+                  src="./static/assets/img/modes/people/1.jpg"
+                  alt=""
+                  class="answers__img"
+                />
+              </div>
+              <p class="answers_col2 answers--good">Luke Skywaker</p>
+              <p class="answers_col3 answers--bad">Jar Jar Binks</p>
+              <p class="answers_col4">Luke Skywaker</p>
+              <div class="answers_col1">
+                <img
+                  src="./static/assets/img/modes/people/2.jpg"
+                  alt=""
+                  class="answers__img"
+                />
+              </div>
+              <p class="answers_col2 answers--good">R2D2</p>
+              <p class="answers_col3 answers--good">R2D2</p>
+              <p class="answers_col4">R2D2</p>
+              <div class="answers_col1">
+                <img
+                  src="./static/assets/img/modes/people/2.jpg"
+                  alt=""
+                  class="answers__img"
+                />
+              </div>
+              <p class="answers_col2 answers--good">R2D2</p>
+              <p class="answers_col3 answers--good">R2D2</p>
+              <p class="answers_col4">R2D2</p>
+            </div>
+          </div>
+        </div>
+        <div class="submit__container">
+          <input type="text" name="name" id="username" />
+          <p>
+            Please fill your name in order to receive eternal glory in whole
+            Galaxy!
+          </p>
+        </div>
+        <div class="force__container">
+          <button class="forceBtn">May the force be with you</button>
+        </div>
+      </div>
     </div>
-</div>
-
-<script src="src/index.js"></script>
-</body>
+    <script src="src/index.js"></script>
+  </body>
 </html>
