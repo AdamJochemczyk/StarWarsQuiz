@@ -11,14 +11,14 @@
 	</head>
 	<body>
 		<div id="swquiz-app">
-			<div class="swquiz-header">
+			<nav class="swquiz-header">
 				<img class="swquiz-header__logo-image" src="static/assets/ui/StarWarsLogo.png" alt=""/>
 				<div id="swquiz-header__main-menu" class="swquiz-header__main-menu">
-					<p class="main-menu__option main-menu__option--selected" id="people">people</p>
-					<p class="main-menu__option" id="vehicles">vehicles</p>
-					<p class="main-menu__option" id="starships">starships</p>
+					<a class="main-menu__option main-menu__option--selected" id="people">people</a>
+					<a class="main-menu__option" id="vehicles">vehicles</a>
+					<a class="main-menu__option" id="starships">starships</a>
 				</div>
-			</div>
+			</nav>
 		
 			<div class="swquiz-mode">
 				<div class="swquiz-mode-container">
@@ -38,17 +38,16 @@
 							</p>
 						</div>
 						<div class="menu__buttons">
-							<button class="swquiz-button">Hall of fame</button>
+							<button class="swquiz-button" id="hallOfFame">Hall of fame</button>
 							<div style="width: 2rem"></div>
-							<button class="swquiz-button swquiz-button--active start-game">PLAY THE GAME</button>
+							<button class="swquiz-button swquiz-button--active" id="start-game">PLAY THE GAME</button>
 						</div>
 					</div>
 				</div>
 				<div class="swquiz-mode-settings">
-					<button class="swquiz-button">Settings</button>
+					<button class="swquiz-button" id="settings">Settings</button>
 				</div>
 			</div>
-
 
 			<div class="gameOver">
 				<h2 class="gameOver__title">Game over</h2>
