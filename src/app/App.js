@@ -1,4 +1,4 @@
-export const App = ({options}) => {
+export const App = ({ options }) => {
   let { swApiBaseUrl, quizMaxTime } = options;
   let quizTime = quizMaxTime;
   let isInGame = false;
@@ -8,7 +8,14 @@ export const App = ({options}) => {
   const hallOfFame = [];
 
   const progress = document.querySelector('.lightsaber_progress--done');
-  const distance = quizTime;
+  const loader = document.querySelector('.loader');
+  let distance = 10;
+  const lighsaberTxt = document.querySelector('.lightsaber__text');
+  const quizGameOverPanel = document.querySelector('.gameOver');
+  const duringGame = document.querySelector('.during_game');
+  const startPanel = document.querySelector('.swquiz-mode');
+  let rulesTitle = document.querySelector('.menu__title > p');
+  let rulesContent = document.querySelector('.menu__content > p');
   //BUTTONS
   const peopleBtn = document.querySelector('#people');
   const vehiclesBtn = document.querySelector('#vehicles');
@@ -19,7 +26,7 @@ export const App = ({options}) => {
   const submitToHallBtn = document.querySelector('.forceBtn');
 
   //ANSWER BUTTONS
-  const answerButtons=Array.from(document.querySelectorAll('.menu__answer'));
+  const answerButtons = Array.from(document.querySelectorAll('.menu__answer'));
 
   //input
   const inputUsername = document.querySelector('#username');
@@ -29,31 +36,104 @@ export const App = ({options}) => {
   const computerAnswers = [];
   const finalAnswers = [];
 
+  //possible numbers of question
+  const peopleQuestion = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88];
+  const starshipsQuestion = [
+    5,
+    9,
+    10,
+    11,
+    12,
+    13,
+    15,
+    21,
+    22,
+    23,
+    27,
+    28,
+    29,
+    31,
+    39,
+    40,
+    41,
+    43,
+    47,
+    48,
+  ];
+  const vehiclesQuestion = [
+    4,
+    6,
+    7,
+    8,
+    14,
+    16,
+    18,
+    19,
+    20,
+    24,
+    25,
+    26,
+    30,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    42,
+  ];
+  let quizQuestion = peopleQuestion;
+
+  const setQuizQuestion = (val) => {
+    quizQuestion = val;
+  };
+
   //choose quiz type
   peopleBtn.addEventListener('click', () => {
     if (!isInGame) {
       localStorage.setItem('quizType', '/people');
+      setQuizQuestion(peopleQuestion);
       peopleBtn.classList.add('main-menu__option--selected');
       vehiclesBtn.classList.remove('main-menu__option--selected');
       starshipsBtn.classList.remove('main-menu__option--selected');
+      rulesTitle.textContent = `
+      Who is this character?
+      `;
+      rulesContent.textContent = `
+      You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select who from Star Wars is showed on the left (Jar Jar Binks right now) from available options.
+      `;
     }
   });
 
   vehiclesBtn.addEventListener('click', () => {
     if (!isInGame) {
       localStorage.setItem('quizType', '/vehicles');
+      setQuizQuestion(vehiclesQuestion);
       peopleBtn.classList.remove('main-menu__option--selected');
       vehiclesBtn.classList.add('main-menu__option--selected');
       starshipsBtn.classList.remove('main-menu__option--selected');
+      rulesTitle.textContent = `
+      Do you recognize this vehicle?
+      `;
+      rulesContent.textContent = `
+      You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which vehicle from Star Wars is showed on the left.
+      `;
     }
   });
 
   starshipsBtn.addEventListener('click', () => {
     if (!isInGame) {
       localStorage.setItem('quizType', '/starships');
+      setQuizQuestion(starshipsQuestion);
       peopleBtn.classList.remove('main-menu__option--selected');
       vehiclesBtn.classList.remove('main-menu__option--selected');
       starshipsBtn.classList.add('main-menu__option--selected');
+      rulesTitle.textContent = `
+      Do you recognize this starship?
+      `;
+      rulesContent.textContent = `
+      You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which starship from Star Wars is showed on the left.
+      `;
     }
   });
 
@@ -61,49 +141,75 @@ export const App = ({options}) => {
     quizTime = val;
   };
 
-  const addPlayerAnswer = (e) => {
+  const addPlayerAnswer = e => {
     playerAnswers.push(e.target.value);
   };
 
   const generateComputerAnswer = () => {
-    //TO DO
-    computerAnswers.push();
+    computerAnswers.push(answerButtons[getRandomInt(answerButtons.length)].textContent);
+  };
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  const setImage = (type, val) => {
+    let image = document.querySelector('#questionImage');
+    let newImage = new Image();
+    newImage.id = 'questionImage';
+    let timestamp=new Date().getTime();
+    newImage.alt = timestamp;
+    newImage.src =
+      `./static/assets/img/modes` +
+      type +
+      `/` +
+      val +
+      `.jpg`;
+    image.parentNode.insertBefore(newImage, image);
+    image.parentNode.removeChild(image);
+  };
+
+  const setPossibleAnswers=goodAnswer=>{
+    let possible=[0,1,2,3]
+    let tmp=getRandomInt(possible.length);
+    answerButtons[tmp].textContent=goodAnswer;
+    possible = possible.filter((item) => item !== tmp);
+    possible.map(async (el)=>{
+      let random = getRandomInt(quizQuestion.length);
+      let answer = await getItemName(quizQuestion[random]); 
+      answerButtons[el].textContent=answer;
+    })
+  }
+
+  const getItemName = async (random) => {
+    const response = await fetch(
+      swApiBaseUrl + localStorage.getItem('quizType') + '/' + random)
+    const data = await response.json();
+    return data.name;
+  };
+  const getQuestion = async () => {
+    let random = getRandomInt(quizQuestion.length);
+    let answer = await getItemName(quizQuestion[random]);
+    setPossibleAnswers(answer);
+    finalAnswers.push(answer);
+    setImage(localStorage.getItem('quizType'), random);
   };
 
   //play game fetching data
   const playGame = () => {
-    console.log('playGame');
     isInGame = true;
-    //change view to playing
-
-    let playingQuiz = true;
-    setTimeout(() => {
-      playingQuiz = false;
-    }, quizTime);
+    countDown();
+    startPanel.style.display = 'none';
+    duringGame.style.display = 'block';
 
     answerButtons.map((aBtn) => {
       aBtn.addEventListener('click', (e) => {
         addPlayerAnswer(e);
         generateComputerAnswer();
+        getQuestion();
       });
     });
-
-    //must be right number
-    fetch(swApiBaseUrl + localStorage.getItem('quizType') + '/9')
-      .then((response) => response.json())
-      .then((response) => {
-        finalAnswers.push(response.name);
-      });
-
-    /*do {
-      //fetch question
-      //set question
-      //set answer
-    } while (playingQuiz);//after timeout stop game
-    */
-    //show final view, generate and validate answers
-
-    isInGame = false;
+    getQuestion();
   };
 
   playTheGameBtn.addEventListener('click', () => {
@@ -117,7 +223,7 @@ export const App = ({options}) => {
   submitToHallBtn.addEventListener('click', () => {
     let username = inputUsername.value;
     clearUsernameInput();
-    hallOfFame.push({
+    /*hallOfFame.push({
       username: username,
       goodAnswers: goodPlayerAnswers,
       questionCount: questionsCount,
@@ -125,48 +231,50 @@ export const App = ({options}) => {
     hallOfFame.sort((a, b) => (a.goodAnswers < b.goodAnswers ? 1 : -1)); //sort desc
     if (hallOfFame.length > 3) {
       hallOfFame.pop(); //remove last item
-    }
-    //remove view
+    }*/
+    quizGameOverPanel.style.display = 'none';
+    startPanel.style.display = 'block';
   });
 
-  hallOfFameBtn.addEventListener("click",()=>{
+  hallOfFameBtn.addEventListener('click', () => {
+    startPanel.style.display = 'none';
+    //show view
     //generate view
-    if(hallOfFame.length===0){
+    if (hallOfFame.length === 0) {
       //textContent hallOfFame is empty
-    }else{
+    } else {
       //create div from hallOfFame array data something
     }
-  })
+  });
 
   function countDown() {
-    var minutes = Math.floor(distance / 60);
-    var seconds = Math.floor(distance % 60);
+    let minutes = Math.floor(distance / 60);
+    let seconds = Math.floor(distance % 60);
 
     if (minutes < 10) minutes = '0' + minutes;
     if (seconds < 10) seconds = '0' + seconds;
 
-    document.querySelector('.lightsaber__text').innerHTML =
-      'Time Left: ' + minutes + 'm ' + seconds + 's';
+    lighsaberTxt.innerHTML = 'Time Left: ' + minutes + 'm ' + seconds + 's';
     if (distance > 0) {
       setTimeout(countDown, 1000);
       progress.style.width = (100 * (distance - seconds)) / distance;
-      console.log((100 * (distance - seconds)) / distance);
       distance--;
     } else {
-      document.querySelector('.during_game').style.display = 'none';
-      document.querySelector('.swquiz-header').style.display = 'none';
-      document.querySelector('.gameOver').style.display = 'block';
+      isInGame = false;
+      duringGame.style.display = 'none';
+      //generate and validate answers
+      quizGameOverPanel.style.display = 'block';
     }
   }
 
   playTheGameBtn.addEventListener('click', () => {
-    document.querySelector('.swquiz-mode').style.display = 'none';
-    document.querySelector('.loader').style.display = 'block';
+    startPanel.style.display = 'none';
+    loader.style.display = 'block';
 
     setTimeout(() => {
-      document.querySelector('.during_game').style.display = 'block';
-      document.querySelector('.loader').style.display = 'none';
+      duringGame.style.display = 'block';
+      loader.style.display = 'none';
       setTimeout(countDown, 1);
     }, 1000);
   });
-}
+};
