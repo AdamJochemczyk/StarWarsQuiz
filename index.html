@@ -23,12 +23,12 @@
 			<div class="swquiz-mode">
 				<div class="swquiz-mode-container">
 					<div class="swquiz-mode__question-image">
-						<img src="static/assets/img/modes/people/2.jpg" alt="" />
+						<img src="static/assets/img/modes/people/2.jpg" alt="" id="questionImage" />
 					</div>
 					<div style="width: 2rem"></div>
 					<div class="swquiz-mode__menu">
 						<div class="menu__title"><p>Who is this character?</p></div>
-						<div class="menu__content">
+						<div class="menu__content_v1">
 							<h2>Mode Rules</h2>
 							<p>
 								You have one minute (1m) to answer as many questions as
@@ -37,6 +37,13 @@
 								now) from available options.
 							</p>
 						</div>
+						<div class="menu__content_v2">
+							<div class="menu__answer"> You have one minute. </div>
+							<div class="menu__answer"> You have one minute. </div>
+							<div class="menu__answer"> You have one minute. </div>
+							<div class="menu__answer"> You have one minute. </div>
+						</div>
+
 						<div class="menu__buttons">
 							<button class="swquiz-button" id="hallOfFame">Hall of fame</button>
 							<div style="width: 2rem"></div>
@@ -44,9 +51,19 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="lightsaber-wrapper">
+					<div class="lightsaber__img"> <img src="static/assets/ui/LightsaberHandle.png" alt=""></div>
+					<div class="lightsaber_progress"> 
+						<div class="lightsaber_progress--done"></div>
+					</div>
+					<div class="lightsaber__text"> Time Left: 02m 00s </div>
+				</div>
+
 				<div class="swquiz-mode-settings">
 					<button class="swquiz-button" id="settings">Settings</button>
 				</div>
+
 			</div>
 
 			<div class="gameOver">
@@ -98,30 +115,6 @@
 				</div>
 			</div>
 
-			<div class="during_game">
-				<div class="swquiz-mode-container">
-					<div class="swquiz-mode__question-image">
-						<img src="static/assets/img/modes/people/2.jpg" alt="" id="questionImage"/>
-					</div>
-					<div style="width: 2rem"></div>
-					<div class="swquiz-mode__menu">
-						<div class="menu__title"><p>Question: Who is this character?</p></div>
-						<div class="menu__answers_wrapper">
-							<div class="menu__answer"> You have one minute. </div>
-							<div class="menu__answer"> You have one minute. </div>
-							<div class="menu__answer"> You have one minute. </div>
-							<div class="menu__answer"> You have one minute. </div>
-						</div>
-					</div>
-				</div>
-				<div class="lightsaber-wrapper">
-					<div class="lightsaber__img"> <img src="static/assets/ui/LightsaberHandle.png" alt=""></div>
-					<div class="lightsaber_progress"> 
-						<div class="lightsaber_progress--done"></div>
-					</div>
-					<div class="lightsaber__text"> Time Left: 02m 00s </div>
-				</div>
-			</div>
 
 			<div class="loader">
 				<div id="load" class="load">

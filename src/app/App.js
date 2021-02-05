@@ -10,17 +10,21 @@ export const App = ({ options }) => {
   const progress = document.querySelector('.lightsaber_progress--done');
   const loader = document.querySelector('.loader');
   let distance = 10;
+  const lightSaber = document.querySelector('.lightsaber-wrapper');
   const lighsaberTxt = document.querySelector('.lightsaber__text');
   const quizGameOverPanel = document.querySelector('.gameOver');
-  const duringGame = document.querySelector('.during_game');
   const startPanel = document.querySelector('.swquiz-mode');
+  const menuContent1 = document.querySelector('.menu__content_v1');
+  const menuContent2 = document.querySelector('.menu__content_v2');
   let rulesTitle = document.querySelector('.menu__title > p');
-  let rulesContent = document.querySelector('.menu__content > p');
+  let rulesContent = document.querySelector('.menu__content_v2 > p');
+   
   //BUTTONS
   const peopleBtn = document.querySelector('#people');
   const vehiclesBtn = document.querySelector('#vehicles');
   const starshipsBtn = document.querySelector('#starships');
   const settingsBtn = document.querySelector('#settings');
+  const menuBtns = document.querySelector('.menu__buttons');
   const hallOfFameBtn = document.querySelector('#hallOfFame');
   const playTheGameBtn = document.querySelector('#start-game');
   const submitToHallBtn = document.querySelector('.forceBtn');
@@ -38,50 +42,8 @@ export const App = ({ options }) => {
 
   //possible numbers of question
   const peopleQuestion = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88];
-  const starshipsQuestion = [
-    5,
-    9,
-    10,
-    11,
-    12,
-    13,
-    15,
-    21,
-    22,
-    23,
-    27,
-    28,
-    29,
-    31,
-    39,
-    40,
-    41,
-    43,
-    47,
-    48,
-  ];
-  const vehiclesQuestion = [
-    4,
-    6,
-    7,
-    8,
-    14,
-    16,
-    18,
-    19,
-    20,
-    24,
-    25,
-    26,
-    30,
-    33,
-    34,
-    35,
-    36,
-    37,
-    38,
-    42,
-  ];
+  const starshipsQuestion = [5,9,10,11,12,13,15,21,22,23,27,28,29,31,39,40,41,43,47,48];
+  const vehiclesQuestion = [4,6,7,8,14,16,18,19,20,24,25,26,30,33,34,35,36,37,38,42];
   let quizQuestion = peopleQuestion;
 
   const setQuizQuestion = (val) => {
@@ -154,7 +116,7 @@ export const App = ({ options }) => {
   }
 
   const setImage = (type, val) => {
-    let image = document.querySelector('#questionImage');
+    let image = document.querySelector('#questionImage'); 
     let newImage = new Image();
     newImage.id = 'questionImage';
     let timestamp=new Date().getTime();
@@ -187,6 +149,7 @@ export const App = ({ options }) => {
     const data = await response.json();
     return data.name;
   };
+  
   const getQuestion = async () => {
     let random = getRandomInt(quizQuestion.length);
     let answer = await getItemName(quizQuestion[random]);
@@ -198,9 +161,9 @@ export const App = ({ options }) => {
   //play game fetching data
   const playGame = () => {
     isInGame = true;
-    countDown();
-    startPanel.style.display = 'none';
-    duringGame.style.display = 'block';
+    //countDown();
+    //startPanel.style.display = 'none';
+    //duringGame.style.display = 'block';
 
     answerButtons.map((aBtn) => {
       aBtn.addEventListener('click', (e) => {
@@ -233,6 +196,12 @@ export const App = ({ options }) => {
       hallOfFame.pop(); //remove last item
     }*/
     quizGameOverPanel.style.display = 'none';
+    distance = 10; //reset distance value
+    menuBtns.style.display = 'flex';
+    menuContent1.style.display = 'block';
+    menuContent2.style.display = 'none';
+    settingsBtn.style.display = 'block';
+    lightSaber.style.display = 'none';
     startPanel.style.display = 'block';
   });
 
@@ -247,6 +216,7 @@ export const App = ({ options }) => {
     }
   });
 
+  // start counting down
   function countDown() {
     let minutes = Math.floor(distance / 60);
     let seconds = Math.floor(distance % 60);
@@ -257,24 +227,31 @@ export const App = ({ options }) => {
     lighsaberTxt.innerHTML = 'Time Left: ' + minutes + 'm ' + seconds + 's';
     if (distance > 0) {
       setTimeout(countDown, 1000);
-      progress.style.width = (100 * (distance - seconds)) / distance;
+      //progress.style.width = (100 * (distance - seconds)) / distance;
       distance--;
     } else {
       isInGame = false;
-      duringGame.style.display = 'none';
+      startPanel.style.display = 'none';
       //generate and validate answers
       quizGameOverPanel.style.display = 'block';
     }
   }
 
+  // spinner 
   playTheGameBtn.addEventListener('click', () => {
     startPanel.style.display = 'none';
     loader.style.display = 'block';
+    menuBtns.style.display = 'none';
+    menuContent1.style.display = 'none';
+    menuContent2.style.display = 'grid';
+    settingsBtn.style.display = 'none';
+    lightSaber.style.display = 'block';
+  
 
     setTimeout(() => {
-      duringGame.style.display = 'block';
       loader.style.display = 'none';
-      setTimeout(countDown, 1);
+      startPanel.style.display = 'block';
+      setTimeout(countDown, 0);
     }, 1000);
   });
 };
