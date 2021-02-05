@@ -2,14 +2,13 @@ export const App = ({ options }) => {
   let { swApiBaseUrl, quizMaxTime } = options;
   let quizTime = quizMaxTime;
   let isInGame = false;
-
+  const distance_value = 100;
   localStorage.setItem('quizType', '/people'); //quizTypes people, vehicles, starships
 
   const hallOfFame = [];
-
   const progress = document.querySelector('.lightsaber_progress--done');
   const loader = document.querySelector('.loader');
-  let distance = 10;
+  let distance = distance_value;
   const lightSaber = document.querySelector('.lightsaber-wrapper');
   const lighsaberTxt = document.querySelector('.lightsaber__text');
   const quizGameOverPanel = document.querySelector('.gameOver');
@@ -196,7 +195,7 @@ export const App = ({ options }) => {
       hallOfFame.pop(); //remove last item
     }*/
     quizGameOverPanel.style.display = 'none';
-    distance = 10; //reset distance value
+    distance = distance_value; //reset distance value
     menuBtns.style.display = 'flex';
     menuContent1.style.display = 'block';
     menuContent2.style.display = 'none';
@@ -227,7 +226,9 @@ export const App = ({ options }) => {
     lighsaberTxt.innerHTML = 'Time Left: ' + minutes + 'm ' + seconds + 's';
     if (distance > 0) {
       setTimeout(countDown, 1000);
-      //progress.style.width = (100 * (distance - seconds)) / distance;
+      progress.style.height = "100%";
+      progress.style.width = ((100 * distance) / distance_value) + "%";
+      console.log(progress.style.width)
       distance--;
     } else {
       isInGame = false;

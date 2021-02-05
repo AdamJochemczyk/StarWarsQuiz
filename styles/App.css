@@ -149,9 +149,13 @@ body {
   border-radius: 16px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 4px 4px 40px rgba(255, 0, 0, 0.9);
   padding: 10px 45px;
+  width: 100%; 
   max-width: 1100px;
   background-color: white;
-  margin: 2% auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .gameOver__title {
   text-transform: uppercase;
@@ -278,6 +282,7 @@ body {
   position: absolute;
   bottom: 2rem;
   margin-left: 2rem;
+  width: calc(100% - 280px - 10%);
 }
 
 .lightsaber_progress {
@@ -289,12 +294,16 @@ body {
   position: absolute;
   margin-left: 280px;
   top: 7px;
+  z-index: 0;
 }
 
 
-.lightsaber__progress--done {
-  box-shadow: 10px 5px 15px red, 10px -5px 15px red, inset 0 5px 4px rgba(255,0,0,.25);
+.lightsaber_progress--done {
   height: 36px;
+  background: #fff;
+  box-shadow: 10px 5px 15px red, 10px -5px 15px red, inset 0 5px 4px rgb(255 0 0 / 25%);
+  border-radius: 8px;
+  z-index: 10;
 }
 
 
@@ -306,8 +315,6 @@ body {
   font-size: 1.2rem;
 }
 
-.lightsaber__timer {
-  }
 
 @media(max-width:768px){
   .gameOver{
