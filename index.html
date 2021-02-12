@@ -14,9 +14,9 @@
 			<nav class="swquiz-header">
 				<img class="swquiz-header__logo-image" src="static/assets/ui/StarWarsLogo.png" alt=""/>
 				<div id="swquiz-header__main-menu" class="swquiz-header__main-menu">
-					<a class="main-menu__option main-menu__option--selected" id="people">people</a>
-					<a class="main-menu__option" id="vehicles">vehicles</a>
-					<a class="main-menu__option" id="starships">starships</a>
+					<button class="main-menu__option main-menu__option--selected" id="people">people</button>
+					<button class="main-menu__option" id="vehicles">vehicles</button>
+					<button class="main-menu__option" id="starships">starships</button>
 				</div>
 			</nav>
 		
@@ -38,10 +38,10 @@
 							</p>
 						</div>
 						<div class="menu__content_v2">
-							<div class="menu__answer"> You have one minute. </div>
-							<div class="menu__answer"> You have one minute. </div>
-							<div class="menu__answer"> You have one minute. </div>
-							<div class="menu__answer"> You have one minute. </div>
+							<button class="menu__answer"> You have one minute. </>
+							<button class="menu__answer"> You have one minute. </>
+							<button class="menu__answer"> You have one minute. </>
+							<button class="menu__answer"> You have one minute. </>
 						</div>
 
 						<div class="menu__buttons">
@@ -79,40 +79,22 @@
 					<div class="answers__right">
 						<p class="answers__detailed">Detailed answers</p>
 						<div class="answers__container">
-							<p class="answers_col2">You</p>
-							<p class="answers_col3">Computer</p>
-							<p class="answers_col4">Answer</p>
-							<div class="answers_col1">
-								<img src="./static/assets/img/modes/people/1.jpg" alt="" class="answers__img"/>
-							</div>
-							<p class="answers_col2 answers--good">Luke Skywaker</p>
-							<p class="answers_col3 answers--bad">Jar Jar Binks</p>
-							<p class="answers_col4">Luke Skywaker</p>
-							<div class="answers_col1">
-								<img src="./static/assets/img/modes/people/2.jpg" alt="" class="answers__img"/>
-							</div>
-							<p class="answers_col2 answers--good">R2D2</p>
-							<p class="answers_col3 answers--good">R2D2</p>
-							<p class="answers_col4">R2D2</p>
-							<div class="answers_col1">
-								<img src="./static/assets/img/modes/people/2.jpg" alt="" class="answers__img"/>
-							</div>
-							<p class="answers_col2 answers--good">R2D2</p>
-							<p class="answers_col3 answers--good">R2D2</p>
-							<p class="answers_col4">R2D2</p>
+							<!-- insert user answers-->
 						</div>
 					</div>
 				</div>
-				<div class="submit__container">
-					<input type="text" name="name" id="username" />
-					<p>
-						Please fill your name in order to receive eternal glory in whole
-						Galaxy!
-					</p>
-				</div>
-				<div class="force__container">
-					<button class="forceBtn">May the force be with you</button>
-				</div>
+				<form>
+					<div class="submit__container">
+						<input type="text" name="name" id="username"/>
+						<p>
+							Please fill your name in order to receive eternal glory in whole
+							Galaxy!
+						</p>
+					</div>
+					<div class="force__container">
+						<button class="forceBtn" type="submit">May the force be with you</button>
+					</div>
+				</form>
 			</div>
 
 

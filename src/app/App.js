@@ -2,7 +2,7 @@ export const App = ({ options }) => {
   let { swApiBaseUrl, quizMaxTime } = options;
   let quizTime = quizMaxTime;
   let isInGame = false;
-  const distance_value = 100;
+  const distance_value = 3; //default 100
   localStorage.setItem('quizType', '/people'); //quizTypes people, vehicles, starships
 
   const hallOfFame = [];
@@ -16,7 +16,7 @@ export const App = ({ options }) => {
   const menuContent1 = document.querySelector('.menu__content_v1');
   const menuContent2 = document.querySelector('.menu__content_v2');
   let rulesTitle = document.querySelector('.menu__title > p');
-  let rulesContent = document.querySelector('.menu__content_v2 > p');
+  let rulesContent = document.querySelector('.menu__content_v1 > p');
    
   //BUTTONS
   const peopleBtn = document.querySelector('#people');
@@ -35,12 +35,13 @@ export const App = ({ options }) => {
   const inputUsername = document.querySelector('#username');
 
   //answers
-  const playerAnswers = [];
-  const computerAnswers = [];
-  const finalAnswers = [];
+  let playerAnswers = [];
+  let computerAnswers = [];
+  let finalAnswers = [];
+  let pictureIndex=[];
 
   //possible numbers of question
-  const peopleQuestion = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88];
+  const peopleQuestion = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83];
   const starshipsQuestion = [5,9,10,11,12,13,15,21,22,23,27,28,29,31,39,40,41,43,47,48];
   const vehiclesQuestion = [4,6,7,8,14,16,18,19,20,24,25,26,30,33,34,35,36,37,38,42];
   let quizQuestion = peopleQuestion;
@@ -103,7 +104,7 @@ export const App = ({ options }) => {
   };
 
   const addPlayerAnswer = e => {
-    playerAnswers.push(e.target.value);
+    playerAnswers.push(e.target.textContent);
   };
 
   const generateComputerAnswer = () => {
@@ -155,11 +156,39 @@ export const App = ({ options }) => {
     setPossibleAnswers(answer);
     finalAnswers.push(answer);
     setImage(localStorage.getItem('quizType'), random);
+    pictureIndex.push(random)
   };
 
+  const blockChangeQuizType=()=>{
+    peopleBtn.style.cursor='inherit';
+    vehiclesBtn.style.cursor = 'inherit';
+    starshipsBtn.style.cursor = 'inherit';
+  }
+  const unlockChangeQuizType = () => {
+    peopleBtn.style.cursor = 'pointer';
+    vehiclesBtn.style.cursor = 'pointer';
+    starshipsBtn.style.cursor = 'pointer';
+  };
+
+  const resetAnswers=()=>{
+    while (playerAnswers.length > 0) {
+      playerAnswers.pop();
+    }
+    while (computerAnswers.length > 0) {
+      computerAnswers.pop();
+    }
+    while (finalAnswers.length > 0) {
+      finalAnswers.pop();
+    }
+    while (pictureIndex.length > 0) {
+      pictureIndex.pop();
+    }
+  }
   //play game fetching data
   const playGame = () => {
     isInGame = true;
+    resetAnswers();
+    blockChangeQuizType();
     //countDown();
     //startPanel.style.display = 'none';
     //duringGame.style.display = 'block';
@@ -182,7 +211,8 @@ export const App = ({ options }) => {
     inputUsername.value = '';
   };
 
-  submitToHallBtn.addEventListener('click', () => {
+  submitToHallBtn.addEventListener('click', e => {
+    e.preventDefault();
     let username = inputUsername.value;
     clearUsernameInput();
     /*hallOfFame.push({
@@ -215,6 +245,59 @@ export const App = ({ options }) => {
     }
   });
 
+  const validateAnswer=(playerAnswer,goodAnswer)=>{
+    if (playerAnswer === goodAnswer) {
+      return 'answers--good';
+    }
+    return "answers--bad"
+  }
+  const generateSummaryAnswersHTML=()=>{
+    let HTML='';
+    for(let i=0;i<finalAnswers.length-1;i++){
+      HTML += `<div class="answers_col1">
+    <img src="./static/assets/img/modes${localStorage.getItem('quizType')}/${
+        pictureIndex[i]
+      }.jpg" class="answers__img"/>
+    </div>
+    <p class="answers_col2 ${validateAnswer(
+      playerAnswers[i],
+      finalAnswers[i],
+    )}">${playerAnswers[i]}</p>
+    <p class="answers_col3 ${validateAnswer(
+      computerAnswers[i],
+      finalAnswers[i],
+    )}">${computerAnswers[i]}</p>
+    <p class="answers_col4">${finalAnswers[i]}</p>
+    `;
+    }
+    return HTML;
+  }
+
+  const getPlayerPoints=(answers)=>{
+    let points=0;
+    for(let i=0;i<answers.length;i++){
+      if(finalAnswers[i]===answers[i]) points++
+    }
+    return points;
+  }
+
+  const generateGameOverSummary =()=>{
+    const summaryDescription = document.querySelector('p.gameOver__summary');
+    const answerTable = document.querySelector('.answers__container');
+    const questionsCount=finalAnswers.length-1;
+    summaryDescription.textContent = `
+    The force is strong in you young Padawan! During 1 minute you have
+		answered ${getPlayerPoints(playerAnswers)} / ${questionsCount} questions. And Computer quessed ${getPlayerPoints(computerAnswers)} / ${questionsCount}.
+    `;
+    answerTable.innerHTML= '';
+    const HTML = `
+    <p class="answers_col2">You</p>
+							<p class="answers_col3">Computer</p>
+							<p class="answers_col4">Answer</p>
+    ${generateSummaryAnswersHTML()}`;
+    answerTable.innerHTML+=HTML
+  }
+
   // start counting down
   function countDown() {
     let minutes = Math.floor(distance / 60);
@@ -233,8 +316,9 @@ export const App = ({ options }) => {
     } else {
       isInGame = false;
       startPanel.style.display = 'none';
-      //generate and validate answers
+      generateGameOverSummary();
       quizGameOverPanel.style.display = 'block';
+      unlockChangeQuizType();
     }
   }
 
