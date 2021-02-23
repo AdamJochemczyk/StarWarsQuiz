@@ -50,8 +50,7 @@ export const App = ({ options }) => {
     quizQuestion = val;
   };
 
-  //choose quiz type
-  peopleBtn.addEventListener('click', () => {
+  const handlePeopleBtnClick=()=>{
     if (!isInGame) {
       localStorage.setItem('quizType', '/people');
       setQuizQuestion(peopleQuestion);
@@ -65,9 +64,9 @@ export const App = ({ options }) => {
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select who from Star Wars is showed on the left (Jar Jar Binks right now) from available options.
       `;
     }
-  });
+  }
 
-  vehiclesBtn.addEventListener('click', () => {
+  const handleVehiclesBtnClick=()=>{
     if (!isInGame) {
       localStorage.setItem('quizType', '/vehicles');
       setQuizQuestion(vehiclesQuestion);
@@ -81,9 +80,9 @@ export const App = ({ options }) => {
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which vehicle from Star Wars is showed on the left.
       `;
     }
-  });
+  }
 
-  starshipsBtn.addEventListener('click', () => {
+  const handleStarshipsBtnClick=()=>{
     if (!isInGame) {
       localStorage.setItem('quizType', '/starships');
       setQuizQuestion(starshipsQuestion);
@@ -97,7 +96,13 @@ export const App = ({ options }) => {
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which starship from Star Wars is showed on the left.
       `;
     }
-  });
+  }
+  //choose quiz type
+  peopleBtn.addEventListener('click', ()=>handlePeopleBtnClick());
+
+  vehiclesBtn.addEventListener('click', () => handleVehiclesBtnClick());
+
+  starshipsBtn.addEventListener('click', () => handleStarshipsBtnClick());
 
   const setQuizTime = (val) => {
     quizTime = val;
@@ -159,16 +164,12 @@ export const App = ({ options }) => {
     pictureIndex.push(random)
   };
 
-  const blockChangeQuizType=()=>{
-    peopleBtn.style.cursor='inherit';
-    vehiclesBtn.style.cursor = 'inherit';
-    starshipsBtn.style.cursor = 'inherit';
+  const canClickOnChangeQuizType=(can)=>{
+    const cursorProperty = can ? 'pointer' : 'inherit';
+    peopleBtn.style.cursor = cursorProperty;
+    vehiclesBtn.style.cursor = cursorProperty;
+    starshipsBtn.style.cursor = cursorProperty;
   }
-  const unlockChangeQuizType = () => {
-    peopleBtn.style.cursor = 'pointer';
-    vehiclesBtn.style.cursor = 'pointer';
-    starshipsBtn.style.cursor = 'pointer';
-  };
 
   const resetAnswers=()=>{
     while (playerAnswers.length > 0) {
@@ -188,7 +189,7 @@ export const App = ({ options }) => {
   const playGame = () => {
     isInGame = true;
     resetAnswers();
-    blockChangeQuizType();
+    canClickOnChangeQuizType(false)
     //countDown();
     //startPanel.style.display = 'none';
     //duringGame.style.display = 'block';
@@ -203,9 +204,7 @@ export const App = ({ options }) => {
     getQuestion();
   };
 
-  playTheGameBtn.addEventListener('click', () => {
-    playGame();
-  });
+  playTheGameBtn.addEventListener('click', () => playGame());
 
   const clearUsernameInput = () => {
     inputUsername.value = '';
@@ -318,7 +317,7 @@ export const App = ({ options }) => {
       startPanel.style.display = 'none';
       generateGameOverSummary();
       quizGameOverPanel.style.display = 'block';
-      unlockChangeQuizType();
+      canClickOnChangeQuizType(true);
     }
   }
 
