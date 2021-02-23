@@ -1,8 +1,7 @@
 export const App = ({ options }) => {
   let { swApiBaseUrl, quizMaxTime } = options;
-  let quizTime = quizMaxTime;
   let isInGame = false;
-  const distance_value = 3; //default 100
+  const distance_value = 100;
   localStorage.setItem('quizType', '/people'); //quizTypes people, vehicles, starships
 
   const hallOfFame = [];
@@ -22,7 +21,6 @@ export const App = ({ options }) => {
   const peopleBtn = document.querySelector('#people');
   const vehiclesBtn = document.querySelector('#vehicles');
   const starshipsBtn = document.querySelector('#starships');
-  const settingsBtn = document.querySelector('#settings');
   const menuBtns = document.querySelector('.menu__buttons');
   const hallOfFameBtn = document.querySelector('#hallOfFame');
   const playTheGameBtn = document.querySelector('#start-game');
@@ -50,8 +48,7 @@ export const App = ({ options }) => {
     quizQuestion = val;
   };
 
-  //choose quiz type
-  peopleBtn.addEventListener('click', () => {
+  const handlePeopleBtnClick=()=>{
     if (!isInGame) {
       localStorage.setItem('quizType', '/people');
       setQuizQuestion(peopleQuestion);
@@ -64,10 +61,11 @@ export const App = ({ options }) => {
       rulesContent.textContent = `
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select who from Star Wars is showed on the left (Jar Jar Binks right now) from available options.
       `;
+      setImage(localStorage.getItem('quizType'), quizQuestion[getRandomInt(quizQuestion.length)]);
     }
-  });
+  }
 
-  vehiclesBtn.addEventListener('click', () => {
+  const handleVehiclesBtnClick=()=>{
     if (!isInGame) {
       localStorage.setItem('quizType', '/vehicles');
       setQuizQuestion(vehiclesQuestion);
@@ -80,10 +78,11 @@ export const App = ({ options }) => {
       rulesContent.textContent = `
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which vehicle from Star Wars is showed on the left.
       `;
+      setImage(localStorage.getItem('quizType'), quizQuestion[getRandomInt(quizQuestion.length)]);
     }
-  });
+  }
 
-  starshipsBtn.addEventListener('click', () => {
+  const handleStarshipsBtnClick=()=>{
     if (!isInGame) {
       localStorage.setItem('quizType', '/starships');
       setQuizQuestion(starshipsQuestion);
@@ -96,24 +95,27 @@ export const App = ({ options }) => {
       rulesContent.textContent = `
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which starship from Star Wars is showed on the left.
       `;
+      setImage(localStorage.getItem('quizType'), quizQuestion[getRandomInt(quizQuestion.length)]);
     }
-  });
+  }
+  //choose quiz type
+  peopleBtn.addEventListener('click', ()=>handlePeopleBtnClick());
 
-  const setQuizTime = (val) => {
-    quizTime = val;
-  };
+  vehiclesBtn.addEventListener('click', () => handleVehiclesBtnClick());
+
+  starshipsBtn.addEventListener('click', () => handleStarshipsBtnClick());
 
   const addPlayerAnswer = e => {
     playerAnswers.push(e.target.textContent);
   };
 
+  const getRandomInt = (max)=> {
+    return Math.floor(Math.random() * max);
+  }
+
   const generateComputerAnswer = () => {
     computerAnswers.push(answerButtons[getRandomInt(answerButtons.length)].textContent);
   };
-
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
 
   const setImage = (type, val) => {
     let image = document.querySelector('#questionImage'); 
@@ -131,14 +133,17 @@ export const App = ({ options }) => {
     image.parentNode.removeChild(image);
   };
 
+  const removePossibleAnswerIndex=(index,possible)=>{
+    return possible.filter((item) => item !== index)
+  }
+
   const setPossibleAnswers=goodAnswer=>{
     let possible=[0,1,2,3]
     let tmp=getRandomInt(possible.length);
     answerButtons[tmp].textContent=goodAnswer;
-    possible = possible.filter((item) => item !== tmp);
+    possible = removePossibleAnswerIndex(tmp,possible);
     possible.map(async (el)=>{
-      let random = getRandomInt(quizQuestion.length);
-      let answer = await getItemName(quizQuestion[random]); 
+      let answer = await getItemName(quizQuestion[getRandomInt(quizQuestion.length)]); 
       answerButtons[el].textContent=answer;
     })
   }
@@ -155,20 +160,16 @@ export const App = ({ options }) => {
     let answer = await getItemName(quizQuestion[random]);
     setPossibleAnswers(answer);
     finalAnswers.push(answer);
-    setImage(localStorage.getItem('quizType'), random);
-    pictureIndex.push(random)
+    setImage(localStorage.getItem('quizType'), quizQuestion[random]);
+    pictureIndex.push((quizQuestion[random]))
   };
 
-  const blockChangeQuizType=()=>{
-    peopleBtn.style.cursor='inherit';
-    vehiclesBtn.style.cursor = 'inherit';
-    starshipsBtn.style.cursor = 'inherit';
+  const canClickOnChangeQuizType=(can)=>{
+    const cursorProperty = can ? 'pointer' : 'inherit';
+    peopleBtn.style.cursor = cursorProperty;
+    vehiclesBtn.style.cursor = cursorProperty;
+    starshipsBtn.style.cursor = cursorProperty;
   }
-  const unlockChangeQuizType = () => {
-    peopleBtn.style.cursor = 'pointer';
-    vehiclesBtn.style.cursor = 'pointer';
-    starshipsBtn.style.cursor = 'pointer';
-  };
 
   const resetAnswers=()=>{
     while (playerAnswers.length > 0) {
@@ -188,7 +189,7 @@ export const App = ({ options }) => {
   const playGame = () => {
     isInGame = true;
     resetAnswers();
-    blockChangeQuizType();
+    canClickOnChangeQuizType(false);
     //countDown();
     //startPanel.style.display = 'none';
     //duringGame.style.display = 'block';
@@ -211,46 +212,7 @@ export const App = ({ options }) => {
     inputUsername.value = '';
   };
 
-  submitToHallBtn.addEventListener('click', e => {
-    e.preventDefault();
-    let username = inputUsername.value;
-    localStorage.setItem('name', username);
-    clearUsernameInput();
-    hallOfFame.push({
-      username: localStorage.getItem("name"),
-      goodAnswers: localStorage.getItem("result"),
-    });
-
-    hallOfFame.sort(function(a,b){
-      return b.goodAnswers - a.goodAnswers;
-    });
-
-    if (hallOfFame.length > 3) { 
-      hallOfFame.pop(); //remove last item
-    };
-
-        /*
-    hallOfFame.sort((a, b) => (a.goodAnswers < b.goodAnswers ? 1 : -1)); //sort desc
-    if (hallOfFame.length > 3) {
-      hallOfFame.pop(); //remove last item
-    }*/
-
-    console.log(hallOfFame);
-    console.log(hallOfFame.length)
-    quizGameOverPanel.style.display = 'none';
-    distance = distance_value; //reset distance value
-    menuBtns.style.display = 'flex';
-    menuContent1.style.display = 'block';
-    menuContent2.style.display = 'none';
-    settingsBtn.style.display = 'block';
-    lightSaber.style.display = 'none';
-    startPanel.style.display = 'block';
-
-  });
-
-  hallOfFameBtn.addEventListener('click', () => {
-    //show view
-    //generate view
+  const generateLeaderboard=()=>{
     if (hallOfFame.length === 0) {
       menuContent1.innerHTML = "Leaderboard is empty...";
 
@@ -267,7 +229,7 @@ export const App = ({ options }) => {
       hallOfFame.forEach(function(obj) { 
         HTML_hallOfFame += `
         <tr>
-          <td>${hallOfFame.indexOf(obj)}</td>
+          <td>${hallOfFame.indexOf(obj)+1}</td>
           <td>${obj.username}</td>
           <td>${obj.goodAnswers}</td>
         </tr>
@@ -277,7 +239,41 @@ export const App = ({ options }) => {
       HTML_hallOfFame +=  `</table>`
       menuContent1.innerHTML = HTML_hallOfFame
     }
+  };
 
+  submitToHallBtn.addEventListener('click', e => {
+    e.preventDefault();
+    let username = inputUsername.value;
+    if(username===''){
+      alert("Cannot set empty username to hall of fame")
+    }else{
+    localStorage.setItem('name', username);
+    clearUsernameInput();
+    hallOfFame.push({
+      username: localStorage.getItem("name"),
+      goodAnswers: localStorage.getItem("result"),
+    });
+
+    hallOfFame.sort((a,b)=>b.goodAnswers - a.goodAnswers);
+
+    if (hallOfFame.length > 3) { 
+      hallOfFame.pop(); //remove last item
+    };
+
+    quizGameOverPanel.style.display = 'none';
+    startPanel.style.display = 'block';
+    distance = distance_value; //reset distance value
+    menuBtns.style.display = 'flex';
+    menuContent1.style.display = 'block';
+    menuContent2.style.display = 'none';
+    lightSaber.style.display = 'none';
+    startPanel.style.display = 'block';
+    generateLeaderboard();
+    }
+  });
+
+  hallOfFameBtn.addEventListener('click', () => {
+   generateLeaderboard();
   });
 
   const validateAnswer=(playerAnswer,goodAnswer)=>{
@@ -354,7 +350,7 @@ export const App = ({ options }) => {
       startPanel.style.display = 'none';
       generateGameOverSummary();
       quizGameOverPanel.style.display = 'block';
-      unlockChangeQuizType();
+       canClickOnChangeQuizType(true);
     }
   }
 
@@ -365,7 +361,6 @@ export const App = ({ options }) => {
     menuBtns.style.display = 'none';
     menuContent1.style.display = 'none';
     menuContent2.style.display = 'grid';
-    settingsBtn.style.display = 'none';
     lightSaber.style.display = 'block';
   
 
@@ -375,6 +370,5 @@ export const App = ({ options }) => {
       setTimeout(countDown, 0);
     }, 1000);
   });
-
 
 };
