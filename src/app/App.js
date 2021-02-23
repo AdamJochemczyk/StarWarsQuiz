@@ -214,16 +214,29 @@ export const App = ({ options }) => {
   submitToHallBtn.addEventListener('click', e => {
     e.preventDefault();
     let username = inputUsername.value;
+    localStorage.setItem('name', username);
     clearUsernameInput();
-    /*hallOfFame.push({
-      username: username,
-      goodAnswers: goodPlayerAnswers,
-      questionCount: questionsCount,
+    hallOfFame.push({
+      username: localStorage.getItem("name"),
+      goodAnswers: localStorage.getItem("result"),
     });
+
+    hallOfFame.sort(function(a,b){
+      return b.goodAnswers - a.goodAnswers;
+    });
+
+    if (hallOfFame.length > 3) { 
+      hallOfFame.pop(); //remove last item
+    };
+
+        /*
     hallOfFame.sort((a, b) => (a.goodAnswers < b.goodAnswers ? 1 : -1)); //sort desc
     if (hallOfFame.length > 3) {
       hallOfFame.pop(); //remove last item
     }*/
+
+    console.log(hallOfFame);
+    console.log(hallOfFame.length)
     quizGameOverPanel.style.display = 'none';
     distance = distance_value; //reset distance value
     menuBtns.style.display = 'flex';
@@ -232,17 +245,39 @@ export const App = ({ options }) => {
     settingsBtn.style.display = 'block';
     lightSaber.style.display = 'none';
     startPanel.style.display = 'block';
+
   });
 
   hallOfFameBtn.addEventListener('click', () => {
-    startPanel.style.display = 'none';
     //show view
     //generate view
     if (hallOfFame.length === 0) {
-      //textContent hallOfFame is empty
+      menuContent1.innerHTML = "Leaderboard is empty...";
+
     } else {
-      //create div from hallOfFame array data something
+
+      let HTML_hallOfFame = `
+      <table style="width:100%">
+        <tr>
+          <th>Place</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr> `
+
+      hallOfFame.forEach(function(obj) { 
+        HTML_hallOfFame += `
+        <tr>
+          <td>${hallOfFame.indexOf(obj)}</td>
+          <td>${obj.username}</td>
+          <td>${obj.goodAnswers}</td>
+        </tr>
+        `
+      });
+
+      HTML_hallOfFame +=  `</table>`
+      menuContent1.innerHTML = HTML_hallOfFame
     }
+
   });
 
   const validateAnswer=(playerAnswer,goodAnswer)=>{
@@ -282,12 +317,14 @@ export const App = ({ options }) => {
   }
 
   const generateGameOverSummary =()=>{
+    let playerScore = getPlayerPoints(playerAnswers);
+    localStorage.setItem('result', playerScore);
     const summaryDescription = document.querySelector('p.gameOver__summary');
     const answerTable = document.querySelector('.answers__container');
     const questionsCount=finalAnswers.length-1;
     summaryDescription.textContent = `
     The force is strong in you young Padawan! During 1 minute you have
-		answered ${getPlayerPoints(playerAnswers)} / ${questionsCount} questions. And Computer quessed ${getPlayerPoints(computerAnswers)} / ${questionsCount}.
+		answered ${playerScore} / ${questionsCount} questions. And Computer quessed ${getPlayerPoints(computerAnswers)} / ${questionsCount}.
     `;
     answerTable.innerHTML= '';
     const HTML = `
@@ -311,7 +348,6 @@ export const App = ({ options }) => {
       setTimeout(countDown, 1000);
       progress.style.height = "100%";
       progress.style.width = ((100 * distance) / distance_value) + "%";
-      console.log(progress.style.width)
       distance--;
     } else {
       isInGame = false;
@@ -339,4 +375,6 @@ export const App = ({ options }) => {
       setTimeout(countDown, 0);
     }, 1000);
   });
+
+
 };
