@@ -204,9 +204,7 @@ export const App = ({ options }) => {
     getQuestion();
   };
 
-  playTheGameBtn.addEventListener('click', () => {
-    playGame();
-  });
+  playTheGameBtn.addEventListener('click', () => playGame());
 
   const clearUsernameInput = () => {
     inputUsername.value = '';
@@ -350,7 +348,7 @@ export const App = ({ options }) => {
       startPanel.style.display = 'none';
       generateGameOverSummary();
       quizGameOverPanel.style.display = 'block';
-       canClickOnChangeQuizType(true);
+      canClickOnChangeQuizType(true);
     }
   }
 
