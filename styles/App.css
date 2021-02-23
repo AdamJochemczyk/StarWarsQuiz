@@ -57,6 +57,7 @@ body {
   font-size: 1.25rem;
   border: none;
   font-weight: 600;
+  outline: none;
 }
 
 .main-menu__option--selected {
@@ -112,6 +113,7 @@ body {
 
 .menu__answer {
   flex: 40%;
+  outline: none;
 }
 
 .menu__buttons {
@@ -126,6 +128,7 @@ body {
   padding: 1rem;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+  outline: none;
 }
 
 .swquiz-button--active {
@@ -140,13 +143,6 @@ body {
 .menu__buttons button:last-child {
   flex-grow: 2;
 }
-
-.swquiz-mode-settings .swquiz-button {
-  position: absolute;
-  bottom: 0;
-  margin-left: 2rem;
-}
-
 
 .gameOver {
   border-radius: 16px;
@@ -235,6 +231,7 @@ body {
 .answers--bad{
   color: rgba(255, 0, 0, 0.6);
 }
+
 .submit__container {
   display: flex;
 }
@@ -243,7 +240,6 @@ body {
   border-radius: 8px;
   padding-left: 14px;
   font-size: 36px;
-  outline: none;
 }
 .submit__container p {
   font-weight: 500;
@@ -318,6 +314,9 @@ body {
   font-size: 1.2rem;
 }
 
+th {
+  text-align: left;
+}
 
 @media(max-width:768px){
   .gameOver{

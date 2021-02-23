@@ -1,8 +1,7 @@
 export const App = ({ options }) => {
   let { swApiBaseUrl, quizMaxTime } = options;
-  let quizTime = quizMaxTime;
   let isInGame = false;
-  const distance_value = 3; //default 100
+  const distance_value = 100;
   localStorage.setItem('quizType', '/people'); //quizTypes people, vehicles, starships
 
   const hallOfFame = [];
@@ -22,7 +21,6 @@ export const App = ({ options }) => {
   const peopleBtn = document.querySelector('#people');
   const vehiclesBtn = document.querySelector('#vehicles');
   const starshipsBtn = document.querySelector('#starships');
-  const settingsBtn = document.querySelector('#settings');
   const menuBtns = document.querySelector('.menu__buttons');
   const hallOfFameBtn = document.querySelector('#hallOfFame');
   const playTheGameBtn = document.querySelector('#start-game');
@@ -63,6 +61,7 @@ export const App = ({ options }) => {
       rulesContent.textContent = `
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select who from Star Wars is showed on the left (Jar Jar Binks right now) from available options.
       `;
+      setImage(localStorage.getItem('quizType'), quizQuestion[getRandomInt(quizQuestion.length)]);
     }
   }
 
@@ -79,6 +78,7 @@ export const App = ({ options }) => {
       rulesContent.textContent = `
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which vehicle from Star Wars is showed on the left.
       `;
+      setImage(localStorage.getItem('quizType'), quizQuestion[getRandomInt(quizQuestion.length)]);
     }
   }
 
@@ -95,6 +95,7 @@ export const App = ({ options }) => {
       rulesContent.textContent = `
       You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select which starship from Star Wars is showed on the left.
       `;
+      setImage(localStorage.getItem('quizType'), quizQuestion[getRandomInt(quizQuestion.length)]);
     }
   }
   //choose quiz type
@@ -104,21 +105,17 @@ export const App = ({ options }) => {
 
   starshipsBtn.addEventListener('click', () => handleStarshipsBtnClick());
 
-  const setQuizTime = (val) => {
-    quizTime = val;
-  };
-
   const addPlayerAnswer = e => {
     playerAnswers.push(e.target.textContent);
   };
 
+  const getRandomInt = (max)=> {
+    return Math.floor(Math.random() * max);
+  }
+
   const generateComputerAnswer = () => {
     computerAnswers.push(answerButtons[getRandomInt(answerButtons.length)].textContent);
   };
-
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
 
   const setImage = (type, val) => {
     let image = document.querySelector('#questionImage'); 
@@ -136,14 +133,17 @@ export const App = ({ options }) => {
     image.parentNode.removeChild(image);
   };
 
+  const removePossibleAnswerIndex=(index,possible)=>{
+    return possible.filter((item) => item !== index)
+  }
+
   const setPossibleAnswers=goodAnswer=>{
     let possible=[0,1,2,3]
     let tmp=getRandomInt(possible.length);
     answerButtons[tmp].textContent=goodAnswer;
-    possible = possible.filter((item) => item !== tmp);
+    possible = removePossibleAnswerIndex(tmp,possible);
     possible.map(async (el)=>{
-      let random = getRandomInt(quizQuestion.length);
-      let answer = await getItemName(quizQuestion[random]); 
+      let answer = await getItemName(quizQuestion[getRandomInt(quizQuestion.length)]); 
       answerButtons[el].textContent=answer;
     })
   }
@@ -160,8 +160,8 @@ export const App = ({ options }) => {
     let answer = await getItemName(quizQuestion[random]);
     setPossibleAnswers(answer);
     finalAnswers.push(answer);
-    setImage(localStorage.getItem('quizType'), random);
-    pictureIndex.push(random)
+    setImage(localStorage.getItem('quizType'), quizQuestion[random]);
+    pictureIndex.push((quizQuestion[random]))
   };
 
   const canClickOnChangeQuizType=(can)=>{
@@ -189,7 +189,7 @@ export const App = ({ options }) => {
   const playGame = () => {
     isInGame = true;
     resetAnswers();
-    canClickOnChangeQuizType(false)
+    canClickOnChangeQuizType(false);
     //countDown();
     //startPanel.style.display = 'none';
     //duringGame.style.display = 'block';
@@ -210,38 +210,68 @@ export const App = ({ options }) => {
     inputUsername.value = '';
   };
 
+  const generateLeaderboard=()=>{
+    if (hallOfFame.length === 0) {
+      menuContent1.innerHTML = "Leaderboard is empty...";
+
+    } else {
+
+      let HTML_hallOfFame = `
+      <table style="width:100%">
+        <tr>
+          <th>Place</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr> `
+
+      hallOfFame.forEach(function(obj) { 
+        HTML_hallOfFame += `
+        <tr>
+          <td>${hallOfFame.indexOf(obj)+1}</td>
+          <td>${obj.username}</td>
+          <td>${obj.goodAnswers}</td>
+        </tr>
+        `
+      });
+
+      HTML_hallOfFame +=  `</table>`
+      menuContent1.innerHTML = HTML_hallOfFame
+    }
+  };
+
   submitToHallBtn.addEventListener('click', e => {
     e.preventDefault();
     let username = inputUsername.value;
+    if(username===''){
+      alert("Cannot set empty username to hall of fame")
+    }else{
+    localStorage.setItem('name', username);
     clearUsernameInput();
-    /*hallOfFame.push({
-      username: username,
-      goodAnswers: goodPlayerAnswers,
-      questionCount: questionsCount,
+    hallOfFame.push({
+      username: localStorage.getItem("name"),
+      goodAnswers: localStorage.getItem("result"),
     });
-    hallOfFame.sort((a, b) => (a.goodAnswers < b.goodAnswers ? 1 : -1)); //sort desc
-    if (hallOfFame.length > 3) {
+
+    hallOfFame.sort((a,b)=>b.goodAnswers - a.goodAnswers);
+
+    if (hallOfFame.length > 3) { 
       hallOfFame.pop(); //remove last item
-    }*/
+    };
+
     quizGameOverPanel.style.display = 'none';
+    startPanel.style.display = 'block';
     distance = distance_value; //reset distance value
     menuBtns.style.display = 'flex';
     menuContent1.style.display = 'block';
     menuContent2.style.display = 'none';
-    settingsBtn.style.display = 'block';
     lightSaber.style.display = 'none';
     startPanel.style.display = 'block';
+    generateLeaderboard();
+    }
   });
 
   hallOfFameBtn.addEventListener('click', () => {
-    startPanel.style.display = 'none';
-    //show view
-    //generate view
-    if (hallOfFame.length === 0) {
-      //textContent hallOfFame is empty
-    } else {
-      //create div from hallOfFame array data something
-    }
+   generateLeaderboard();
   });
 
   const validateAnswer=(playerAnswer,goodAnswer)=>{
@@ -281,12 +311,14 @@ export const App = ({ options }) => {
   }
 
   const generateGameOverSummary =()=>{
+    let playerScore = getPlayerPoints(playerAnswers);
+    localStorage.setItem('result', playerScore);
     const summaryDescription = document.querySelector('p.gameOver__summary');
     const answerTable = document.querySelector('.answers__container');
     const questionsCount=finalAnswers.length-1;
     summaryDescription.textContent = `
     The force is strong in you young Padawan! During 1 minute you have
-		answered ${getPlayerPoints(playerAnswers)} / ${questionsCount} questions. And Computer quessed ${getPlayerPoints(computerAnswers)} / ${questionsCount}.
+		answered ${playerScore} / ${questionsCount} questions. And Computer quessed ${getPlayerPoints(computerAnswers)} / ${questionsCount}.
     `;
     answerTable.innerHTML= '';
     const HTML = `
@@ -310,7 +342,6 @@ export const App = ({ options }) => {
       setTimeout(countDown, 1000);
       progress.style.height = "100%";
       progress.style.width = ((100 * distance) / distance_value) + "%";
-      console.log(progress.style.width)
       distance--;
     } else {
       isInGame = false;
@@ -328,7 +359,6 @@ export const App = ({ options }) => {
     menuBtns.style.display = 'none';
     menuContent1.style.display = 'none';
     menuContent2.style.display = 'grid';
-    settingsBtn.style.display = 'none';
     lightSaber.style.display = 'block';
   
 
@@ -338,4 +368,5 @@ export const App = ({ options }) => {
       setTimeout(countDown, 0);
     }, 1000);
   });
+
 };
