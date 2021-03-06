@@ -70,9 +70,12 @@ body {
 
 .swquiz-mode-container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   margin: auto 5%;
+}
+
+.swquiz-mode__question-image {
+  margin: auto 0;
 }
 
 .swquiz-mode__question-image img {
@@ -83,7 +86,6 @@ body {
 }
 
 .swquiz-mode__menu {
-  display: flex;
   flex-flow: column wrap;
   justify-content: space-between;
   width: 70%;
