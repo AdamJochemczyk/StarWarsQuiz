@@ -1,1 +1,107 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><script src="https://kit.fontawesome.com/4d34a12f9d.js" crossorigin></script><link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"><link rel="stylesheet" href="App.533c19e6.css"><title>CodersCamp2020 | Star Wars API QUIZ</title></head><body> <div id="swquiz-app"> <nav class="swquiz-header"> <img class="swquiz-header__logo-image" src="StarWarsLogo.7ebfaa90.png" alt=""> <div id="swquiz-header__main-menu" class="swquiz-header__main-menu"> <button class="main-menu__option main-menu__option--selected" id="people">people</button> <button class="main-menu__option" id="vehicles">vehicles</button> <button class="main-menu__option" id="starships">starships</button> </div> </nav> <div class="swquiz-mode"> <div class="swquiz-mode-container"> <div class="swquiz-mode__question-image"> <img src="2.79bee613.jpg" alt="" id="questionImage"> </div> <div style="width:2rem"></div> <div class="swquiz-mode__menu"> <div class="menu__title"><p>Who is this character?</p></div> <div class="menu__content_init"> <h2> &#127891; Mode Rules</h2> <p> You have one minute (1m) to answer as many questions as possible. During the game on each question you need to select who from Star Wars is showed on the left (Jar Jar Binks right now) from available options. </p> </div> <div class="menu__content_game"> <button class="menu__answer"> You have one minute. </> </button><button class="menu__answer"> You have one minute. </> </button><button class="menu__answer"> You have one minute. </> </button><button class="menu__answer"> You have one minute. </> </button></div> <div class="menu__buttons"> <button class="swquiz-button" id="hallOfFame">Hall of fame</button> <div style="width:2rem"></div> <button class="swquiz-button swquiz-button--active" id="start-game">PLAY THE GAME</button> </div> </div> </div> <div class="lightsaber-wrapper"> <div class="lightsaber__img"> <img src="LightsaberHandle.5ee17025.png" alt=""></div> <div class="lightsaber_progress"> <div class="lightsaber_progress--done"></div> </div> <div class="lightsaber__text"> Time Left: 02m 00s </div> </div> </div> <div class="gameOver"> <h2 class="gameOver__title">Game over</h2> <p class="gameOver__summary"> The force is strong in you young Padawan! During 1 minute you have answered 10 / 23 questions. And Computer quessed 5 / 23. </p> <div class="gameOver__answers"> <div class="answers__left"> <img src="MasterYodaLeft.2261ebdb.png" alt="yoda left"> </div> <div class="answers__right"> <p class="answers__detailed">Detailed answers</p> <div class="answers__container">  </div> </div> </div> <form> <div class="submit__container"> <input type="text" name="name" id="username" required> <p> Please fill your name in order to receive eternal glory in whole Galaxy! </p> </div> <div class="force__container"> <button class="forceBtn" type="submit">May the force be with you</button> </div> </form> </div> <div class="loader"> <div id="load" class="load"> <i class="fa fa-4x fa-fw fa-pulse fa-spinner"></i> <span class="sr-only">Loading...</span> </div> </div> </div> <script src="src.85e11ae5.js"></script> </body></html>
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<script src="https://kit.fontawesome.com/4d34a12f9d.js" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/App.5fff0933.css">
+		<title>CodersCamp2020 | Star Wars API QUIZ</title>
+	<script src="/App.5fff0933.js"></script></head>
+	<body>
+		<div id="swquiz-app">
+			<nav class="swquiz-header">
+				<img class="swquiz-header__logo-image" src="/StarWarsLogo.68d0f72f.png" alt="">
+				<div id="swquiz-header__main-menu" class="swquiz-header__main-menu">
+					<button class="main-menu__option main-menu__option--selected" id="people">people</button>
+					<button class="main-menu__option" id="vehicles">vehicles</button>
+					<button class="main-menu__option" id="starships">starships</button>
+				</div>
+			</nav>
+		
+			<div class="swquiz-mode">
+				<div class="swquiz-mode-container">
+					<div class="swquiz-mode__question-image">
+						<img src="/2.cfa917fe.jpg" alt="" id="questionImage">
+					</div>
+					<div style="width: 2rem"></div>
+					<div class="swquiz-mode__menu">
+						<div class="menu__title"><p>Who is this character?</p></div>
+						<div class="menu__content_init">
+							<h2>	
+								&#127891; Mode Rules</h2>
+							<p>
+								You have one minute (1m) to answer as many questions as
+								possible. During the game on each question you need to select
+								who from Star Wars is showed on the left (Jar Jar Binks right
+								now) from available options.
+							</p>
+						</div>
+						<div class="menu__content_game">
+							<button class="menu__answer"> You have one minute. </>
+							</button><button class="menu__answer"> You have one minute. </>
+							</button><button class="menu__answer"> You have one minute. </>
+							</button><button class="menu__answer"> You have one minute. </>
+						</button></div>
+
+						<div class="menu__buttons">
+							<button class="swquiz-button" id="hallOfFame">Hall of fame</button>
+							<div style="width: 2rem"></div>
+							<button class="swquiz-button swquiz-button--active" id="start-game">PLAY THE GAME</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="lightsaber-wrapper">
+					<div class="lightsaber__img"> <img src="/LightsaberHandle.aa2f81c0.png" alt=""></div>
+					<div class="lightsaber_progress"> 
+						<div class="lightsaber_progress--done"></div>
+					</div>
+					<div class="lightsaber__text"> Time Left: 02m 00s </div>
+				</div>
+
+			</div>
+
+			<div class="gameOver">
+				<h2 class="gameOver__title">Game over</h2>
+				<p class="gameOver__summary">
+					The force is strong in you young Padawan! During 1 minute you have
+					answered 10 / 23 questions. And Computer quessed 5 / 23.
+				</p>
+				<div class="gameOver__answers">
+					<div class="answers__left">
+						<img src="/MasterYodaLeft.b8653fdf.png" alt="yoda left">
+					</div>
+					<div class="answers__right">
+						<p class="answers__detailed">Detailed answers</p>
+						<div class="answers__container">
+							<!-- insert user answers-->
+						</div>
+					</div>
+				</div>
+				<form>
+					<div class="submit__container">
+						<input type="text" name="name" id="username" required="">
+						<p>
+							Please fill your name in order to receive eternal glory in whole
+							Galaxy!
+						</p>
+					</div>
+					<div class="force__container">
+						<button class="forceBtn" type="submit">May the force be with you</button>
+					</div>
+				</form>
+			</div>
+
+
+			<div class="loader">
+				<div id="load" class="load">
+					<i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+					<span class="sr-only">Loading...</span>
+				</div>
+			</div>
+		</div>
+		<script src="/src.a2b27638.js"></script>
+	</body>
+</html>

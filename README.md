@@ -13,6 +13,16 @@ App was created to improve skills in JS, REST, html, css, git, teamwork.
 * JS,
 * Parcel
 
+## Launch
+
+To run this project, install it locally using npm:
+
+```
+$ cd ../StarWarsQuiz
+$ npm install
+$ npm run start:dev 
+```
+
 ## Contributors
 
 * [Adam Jochemczyk](https://github.com/AdamJochemczyk)
